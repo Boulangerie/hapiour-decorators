@@ -6,8 +6,8 @@
     "type": "git",
     "url": "git+https://github.com/teads/hapiour.git"
   },
-  "main": "./build/hapiour.js",
-  "typing": "./build/hapiour",
+  "main": "./build/hapiour",
+  "typings": "./build/hapiour",
   "scripts": {
     "typings": "typings",
     "typings:install": "typings install",
