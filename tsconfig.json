@@ -1,0 +1,21 @@
+{
+  "compileOnSave": false,
+  "files": [
+    "./lib/hapiour.ts",
+    "./typings/index.d.ts"
+  ],
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": false,
+    "sourceMap": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": true,
+    "preserveConstEnums": true,
+    "noLib": false,
+    "outDir": "./build",
+    "pretty": true,
+    "sourceMap": true
+  }
+}

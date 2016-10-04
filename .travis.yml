@@ -1,0 +1,24 @@
+language: node_js
+
+node_js:
+  - '4.4.4'
+
+install:
+  # Install npm dependecies
+  # Note: "npm install" also runs "npm prepublish"
+  - npm install
+
+before_script:
+  # Install external definitions
+  # this is not needed because npm install runs also prepublish where we install typings
+  # - npm run typings:install
+
+script:
+  # - npm test
+
+deploy:
+  provider: npm
+  email: frontend@teads.tv
+  api_key: $NPM_TOKEN
+  on:
+    tags: true

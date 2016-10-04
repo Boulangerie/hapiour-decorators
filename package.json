@@ -1,0 +1,26 @@
+{
+  "name": "hapiour",
+  "version": "0.0.1",
+  "description": "Typescript decorators for Hapi",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teads/hapiour.git"
+  },
+  "main": "./build/hapiour.js",
+  "typing": "./build/hapiour",
+  "scripts": {
+    "typings": "typings",
+    "typings:install": "typings install",
+    "prepublish": "npm run typings:install && tsc"
+  },
+  "author": "frontend@teads.tv",
+  "license": "MIT",
+  "dependencies": {
+    "hapi": "^15.0.3",
+    "lodash": "^4.16.2"
+  },
+  "devDependencies": {
+    "typescript": "^2.0.3",
+    "typings": "^1.4.0"
+  }
+}
