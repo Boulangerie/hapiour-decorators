@@ -8,11 +8,15 @@ export class Store<T> {
     this.store = {}
   }
 
-  public add(item: T, key: string): void {
+  public add(key: string, item: T): void {
     if (!_.isArray(this.store[key])) {
       this.store[key] = []
     }
     this.store[key].push(item)
+  }
+
+  public has(key: string): boolean {
+    return _.has(this.store, key)
   }
 
   public get(key: string): T {
