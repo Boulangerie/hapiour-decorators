@@ -1,6 +1,6 @@
 {
   "name": "hapiour",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Typescript decorators for Hapi",
   "repository": {
     "type": "git",
