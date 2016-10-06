@@ -35,7 +35,6 @@ export function ModuleDecorator(config: IModuleConfig): Function {
       route.handler = (<Function>route.handler).bind(userMod)
     }
 
-
     // create and store module instance
     let mod: IModule = new Module(target.name)
     Module.modules.add(mod.name, mod)
