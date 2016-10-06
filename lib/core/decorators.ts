@@ -10,8 +10,6 @@ export function AppDecorator(config: IServerConnectionOptions): Function {
     // create and store app instance
     let app: IApp = new App(target.name, _.clone(config), target)
     App.apps.add(app.name, app)
-
-    console.log('4 App', app.name + ' registered')
   }
 }
 
@@ -21,7 +19,6 @@ export function ModulesDecorator(Modules: Array<any>): Function {
     // make relation between App/Module and Modules
     for (let Mod of Modules) {
       Module.modulesMapping.add(target.name, Mod.name)
-      console.log('3 Module', Mod.name + ' linked to ' + target.name)
     }
   }
 }
@@ -41,8 +38,6 @@ export function ModuleDecorator(config: IModuleConfig): Function {
 
     // store module config
     Module.configs.add(mod.name, config)
-
-    console.log('2 Module', mod.name + ' registered')
   }
 }
 
@@ -53,7 +48,5 @@ export function RouteDecorator(config: IRouteConfiguration): Function {
     let route: IRouteConfiguration = _.clone(config)
     route.handler = descriptor.value
     Module.routes.add(target.constructor.name, route)
-
-    console.log('1 Route', target.constructor.name + '.' + propertyKey + ' registered')
   }
 }
