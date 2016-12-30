@@ -9,6 +9,7 @@ Typescript decorators for Hapi
 # Install
 
 ```bash
+npm install -g typescript
 npm install --save hapi
 npm install --save hapiour
 ```
@@ -26,9 +27,9 @@ src/
 ## Declare your app
 ### src/app.ts
 ```js
-import {Server} from 'hapi'
-import {App, IApp, Modules} from 'hapiour'
-import {Beer} from './beer.module'
+import { Server } from 'hapi'
+import { App, IApp, Modules } from 'hapiour'
+import { Beer } from './beer.module'
 
 @App({
   port: 3000
@@ -43,6 +44,7 @@ export class MyApp implements IApp {
   }
 
   public onInit(): void {
+    console.log('Server init')
   }
 
   public onStart(): void {
@@ -55,24 +57,52 @@ export class MyApp implements IApp {
 ## Declare a module
 ### src/beer.module.ts
 ```js
-import {Route, Modules, Module} from 'hapiour'
-import {Request, IReply} from 'hapi'
+import { Route, Modules, Module } from 'hapiour'
+import { Request, IReply } from 'hapi'
 
 @Module({
   basePath: '/beer'
 })
 export class Beer {
 
-  public constructor() {}
+  private beerCount: number
+
+  public constructor() {
+    this.beerCount = 0
+  }
 
   @Route({
     method: 'GET',
     path: '',
     config: {}
   })
-  public get(request: Request, reply: IReply) {
+  public getABeer(request: Request, reply: IReply) {
+    this.beerCount++
     reply({
-      'data': 'Hey I\'m alive'
+      'data': 'Hey! Take this beer !'
+    })
+  }
+
+  @Route({
+    method: 'GET',
+    path: '/count',
+    config: {}
+  })
+  public getCount(request: Request, reply: IReply) {
+    reply({
+      'data': this.beerCount
+    })
+  }
+
+  @Route({
+    method: 'DELETE',
+    path: '/count',
+    config: {}
+  })
+  public resetCount(request: Request, reply: IReply) {
+    this.beerCount = 0
+    reply({
+      'data': 'Done'
     })
   }
 
@@ -82,8 +112,8 @@ export class Beer {
 ## Bootstrap your app
 ### src/main.ts
 ```js
-import {bootstrap} from 'hapiour'
-import {MyApp} from './app'
+import { bootstrap } from 'hapiour'
+import { MyApp } from './app'
 
 bootstrap(MyApp)
 ```
@@ -93,7 +123,7 @@ bootstrap(MyApp)
 #### Class Decorators
 - `@App(config: Hapi.IServerConnectionOptions)` : Declare a new App (correspond to a new Hapi.Server instance).
 - `@Module(config: IModuleConfig)` : Declare a new Module (class containing routes).
-- `@Modules(modules: Array<Module>)` : Assign an array of modules to an App or a Module.
+- `@Inject(modules: Array<Module>)` : Assign an array of modules to an App or a Module.
 
 #### Method decorators
 - `@Route(config: Hapi.IRouteConfiguration)` : Declare a new Route inside a Module. The target method will become the route handler.

@@ -1,7 +1,7 @@
 import * as _ from 'lodash'
-import {Server, IServerConnectionOptions, IRouteConfiguration} from 'hapi'
-import {Store} from '../utils/store.class'
-import {Module} from './module.class'
+import { Server, IServerConnectionOptions, IRouteConfiguration } from 'hapi'
+import { Store } from '../utils/store.class'
+import { Module } from './module.class'
 
 export class App implements IApp {
 
@@ -22,12 +22,16 @@ export class App implements IApp {
     this.initOptions()
     this.initRoutes()
 
-    this.userApp.onInit()
+    try {
+      this.userApp.onInit()
+    } catch(err) {}
   }
 
   public start(): void {
     this.server.start(() => {
-      this.userApp.onStart()
+      try {
+        this.userApp.onStart()
+      } catch(err) {}
     })
   }
 

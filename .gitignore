@@ -1,13 +1,7 @@
 build
 node_modules
-typings
 .idea
 reports
 npm-debug.log
-
-# Used by Jenkins CI
-ci-front
-ci-front:feat
 .gitmodules
-
 _package.json

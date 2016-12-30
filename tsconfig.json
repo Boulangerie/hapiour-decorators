@@ -1,10 +1,12 @@
 {
   "compileOnSave": false,
   "files": [
-    "./lib/hapiour.ts",
-    "./typings/index.d.ts"
+    "./lib/hapiour.ts"
   ],
   "compilerOptions": {
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
     "module": "commonjs",
     "target": "es5",
     "noImplicitAny": false,
@@ -15,7 +17,6 @@
     "preserveConstEnums": true,
     "noLib": false,
     "outDir": "./build",
-    "pretty": true,
-    "sourceMap": true
+    "pretty": true
   }
 }

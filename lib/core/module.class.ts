@@ -1,7 +1,7 @@
 import * as _ from 'lodash'
-import {IRouteConfiguration} from 'hapi'
-import {Store} from '../utils/store.class'
-import {IApp} from './app.class'
+import { IRouteConfiguration } from 'hapi'
+import { Store } from '../utils/store.class'
+import { IApp } from './app.class'
 
 export class Module implements IModule {
 
