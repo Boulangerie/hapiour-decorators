@@ -1,4 +1,4 @@
-import {App, IApp} from './app.class'
+import { App, IApp } from './app.class'
 
 export function bootstrap(...BootstrapedApps: Array<any>): void {
   for (let BootstrapedApp of BootstrapedApps) {

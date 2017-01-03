@@ -1,8 +1,8 @@
 import * as _ from 'lodash'
-import {IRouteConfiguration, IReply, Request, IServerConnectionOptions} from 'hapi'
-import {App, IApp, IUserApp} from './app.class'
-import {Module, IModule, IModuleConfig} from './module.class'
-import {Store} from '../utils/store.class'
+import { IRouteConfiguration, IReply, Request, IServerConnectionOptions } from 'hapi'
+import { App, IApp, IUserApp } from './app.class'
+import { Module, IModule, IModuleConfig } from './module.class'
+import { Store } from '../utils/store.class'
 
 export function AppDecorator(config: IServerConnectionOptions): Function {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
@@ -13,7 +13,7 @@ export function AppDecorator(config: IServerConnectionOptions): Function {
   }
 }
 
-export function ModulesDecorator(Modules: Array<any>): Function {
+export function InjectDecorator(Modules: Array<any>): Function {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
 
     // make relation between App/Module and Modules
