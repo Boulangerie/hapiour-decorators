@@ -21,7 +21,7 @@
     "@types/hapi": "^13.0.37",
     "@types/lodash": "^4.14.44",
     "@types/node": "^6.0.54",
-    "hapi": "^15.2.0",
+    "hapi": "^16.1.0",
     "lodash": "^4.17.3"
   },
   "devDependencies": {
