@@ -28,13 +28,13 @@ src/
 ### src/app.ts
 ```js
 import { Server } from 'hapi'
-import { App, IApp, Modules } from 'hapiour'
+import { App, IApp, Inject } from 'hapiour'
 import { Beer } from './beer.module'
 
 @App({
   port: 3000
 })
-@Modules([Beer])
+@Inject([Beer])
 export class MyApp implements IApp {
 
   private server: Server
@@ -57,7 +57,7 @@ export class MyApp implements IApp {
 ## Declare a module
 ### src/beer.module.ts
 ```js
-import { Route, Modules, Module } from 'hapiour'
+import { Route, Module } from 'hapiour'
 import { Request, IReply } from 'hapi'
 
 @Module({
