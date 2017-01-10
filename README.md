@@ -1,6 +1,9 @@
 [![Build Status](https://travis-ci.org/teads/hapiour.svg?branch=master)](https://travis-ci.org/teads/hapiour)
 [![npm version](https://img.shields.io/npm/v/hapiour.svg)](https://www.npmjs.com/package/hapiour)
+[![npm downloads](https://img.shields.io/npm/dm/hapiour.svg?style=flat-square)](http://npm-stat.com/charts.html?package=hapiour&from=2016-10-01)
 [![dependencies](https://david-dm.org/teads/hapiour.svg)](https://david-dm.org/teads/hapiour)
+[![npm devDependencies](https://img.shields.io/david/dev/teads/hapiour.svg)](https://david-dm.org/teads/hapiour)
+[![npm license](https://img.shields.io/npm/l/hapiour.svg)](https://www.npmjs.org/package/hapiour)
 
 # hapiour
 
