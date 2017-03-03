@@ -22,10 +22,19 @@ export class App implements IApp {
 
     this.initOptions()
     this.initPlugins((err: any) => {
-      this.initRoutes()
       try {
-        this.userApp.onInit(err)
-      } catch(err) {}
+        this.userApp.onPluginInit(err, () => {
+          this.initRoutes()
+          try {
+            this.userApp.onInit()
+          } catch(err) {}
+        })
+      } catch(err) {
+        this.initRoutes()
+        try {
+          this.userApp.onInit()
+        } catch(err) {}
+      }
     })
 
   }
@@ -74,6 +83,7 @@ export interface IUserAppStatic {
 }
 
 export interface IUserApp {
-  onInit?(err?: any): void
+  onPluginInit?(err: any, done?: () => void): void
+  onInit?(): void
   onStart?(): void
 }

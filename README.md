@@ -49,11 +49,16 @@ export class MyApp implements IApp {
     this.server = server
   }
 
-  public onInit(err: any): void {
-    console.log('Server init')
+  public onPluginInit(err: any, done: () => void) {
     if (err) {
       console.log('Init error', err)
     }
+    console.log('Plugin init')
+    done()
+  }
+
+  public onInit(): void {
+    console.log('Server init done')
   }
 
   public onStart(): void {
@@ -173,7 +178,8 @@ bootstrap(MyApp)
 
 #### IApp
 - `constructor(server: Hapi.Server)` : App will be constructed with Hapi server instance as first argument.
-- `onInit(err: any)`: Method called when Hapi server initialization is done.
+- `onPluginInit(err: any, done: () => void)`: Method called when Hapi plugin registration is done. If this method is defined, you must call done() to continue server initialization.
+- `onInit()`: Method called when Hapi server initialization is done.
 - `onStart()`: Method called when Hapi server is started.
 
 #### IModuleConfig

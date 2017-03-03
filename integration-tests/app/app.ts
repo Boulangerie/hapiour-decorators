@@ -16,11 +16,16 @@ export class MyApp implements IApp {
     this.server = server
   }
 
-  public onInit(err: any): void {
-    console.log('Server init')
+  public onPluginInit(err: any, done: () => void) {
     if (err) {
       console.log('Init error', err)
     }
+    console.log('Plugin init')
+    done()
+  }
+
+  public onInit(): void {
+    console.log('Server init done')
   }
 
   public onStart(): void {
