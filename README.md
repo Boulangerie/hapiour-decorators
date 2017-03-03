@@ -32,7 +32,7 @@ src/
 ### src/app.ts
 ```js
 import { Server } from 'hapi'
-import { App, IApp, Inject } from 'hapiour'
+import { App, IApp, Inject, Plugins } from 'hapiour'
 import { Beer } from './beer.module'
 import { GreetingsPlugin } from './greetings.plugin'
 
