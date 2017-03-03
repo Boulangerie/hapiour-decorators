@@ -23,6 +23,14 @@ export function InjectDecorator(Modules: Array<any>): Function {
   }
 }
 
+export function PluginsDecorator(Plugins: Array<any>): Function {
+  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+
+    // add plugins too the register stack
+    App.pluginsMapping.add(target.name, Plugins)
+  }
+}
+
 export function ModuleDecorator(config: IModuleConfig): Function {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
 

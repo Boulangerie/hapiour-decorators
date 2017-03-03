@@ -1,11 +1,13 @@
 import { Server } from 'hapi'
-import { App, IApp, Inject } from '../../lib/hapiour'
+import { App, IApp, Inject, Plugins } from '../../lib/hapiour'
 import { Beer } from './beer.module'
+import { GreetingsPlugin } from './greetings.plugin'
 
 @App({
   port: 3000
 })
 @Inject([Beer])
+@Plugins([GreetingsPlugin])
 export class MyApp implements IApp {
 
   public server: Server
@@ -14,8 +16,11 @@ export class MyApp implements IApp {
     this.server = server
   }
 
-  public onInit(): void {
+  public onInit(err: any): void {
     console.log('Server init')
+    if (err) {
+      console.log('Init error', err)
+    }
   }
 
   public onStart(): void {

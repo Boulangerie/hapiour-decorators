@@ -25,6 +25,7 @@ src/
   -> main.ts
   -> app.ts
   -> beer.module.ts
+  -> greetings.plugin.ts
 ```
 
 ## Declare your app
@@ -33,11 +34,13 @@ src/
 import { Server } from 'hapi'
 import { App, IApp, Inject } from 'hapiour'
 import { Beer } from './beer.module'
+import { GreetingsPlugin } from './greetings.plugin'
 
 @App({
   port: 3000
 })
 @Inject([Beer])
+@Plugins([GreetingsPlugin])
 export class MyApp implements IApp {
 
   private server: Server
@@ -46,8 +49,11 @@ export class MyApp implements IApp {
     this.server = server
   }
 
-  public onInit(): void {
+  public onInit(err: any): void {
     console.log('Server init')
+    if (err) {
+      console.log('Init error', err)
+    }
   }
 
   public onStart(): void {
@@ -112,6 +118,37 @@ export class Beer {
 }
 ```
 
+## Declare a plugin
+### src/greetings.plugin.ts
+```js
+import { Server } from 'hapi'
+
+interface IRegister {
+  (server: Server, options: any, next: any): void
+  attributes?: any
+}
+
+class GreetingsPluginFactory {
+
+  public register: IRegister
+
+  public constructor() {
+    this.register = (server: Server, options: any, next: any) => {
+      console.log('Hey ! Welcome here young beer addict !')
+      next()
+    }
+
+    this.register.attributes = {
+      name: 'GreetingsPlugin',
+      version: '0.1.0'
+    }
+  }
+
+}
+
+export const GreetingsPlugin = new GreetingsPluginFactory()
+```
+
 ## Bootstrap your app
 ### src/main.ts
 ```js
@@ -127,6 +164,7 @@ bootstrap(MyApp)
 - `@App(config: Hapi.IServerConnectionOptions)` : Declare a new App (correspond to a new Hapi.Server instance).
 - `@Module(config: IModuleConfig)` : Declare a new Module (class containing routes).
 - `@Inject(modules: Array<Module>)` : Assign an array of modules to an App or a Module.
+- `@Plugins(plugins: Array<Plugin>)` : Assign an array of plugins to an App.
 
 #### Method decorators
 - `@Route(config: Hapi.IRouteConfiguration)` : Declare a new Route inside a Module. The target method will become the route handler.
@@ -135,7 +173,7 @@ bootstrap(MyApp)
 
 #### IApp
 - `constructor(server: Hapi.Server)` : App will be constructed with Hapi server instance as first argument.
-- `onInit()`: Method called when Hapi server initialization is done.
+- `onInit(err: any)`: Method called when Hapi server initialization is done.
 - `onStart()`: Method called when Hapi server is started.
 
 #### IModuleConfig
