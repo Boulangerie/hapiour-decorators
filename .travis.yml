@@ -1,0 +1,17 @@
+language: node_js
+
+node_js:
+  - '6.9.1'
+
+install:
+  - npm install
+
+script:
+  - npm test
+
+deploy:
+  provider: npm
+  email: alexandre.moatty@gmail.com
+  api_key: $NPM_TOKEN
+  on:
+    tags: true

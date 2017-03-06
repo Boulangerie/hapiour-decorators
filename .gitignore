@@ -1,0 +1,8 @@
+build
+node_modules
+.idea
+.vscode
+reports
+npm-debug.log
+.gitmodules
+_package.json
