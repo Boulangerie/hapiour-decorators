@@ -1,11 +1,11 @@
-[![Build Status](https://travis-ci.org/teads/hapiour.svg?branch=master)](https://travis-ci.org/teads/hapiour)
-[![npm version](https://img.shields.io/npm/v/hapiour.svg)](https://www.npmjs.com/package/hapiour)
-[![npm downloads](https://img.shields.io/npm/dm/hapiour.svg?style=flat-square)](http://npm-stat.com/charts.html?package=hapiour&from=2016-10-01)
-[![dependencies](https://david-dm.org/teads/hapiour.svg)](https://david-dm.org/teads/hapiour)
-[![npm devDependencies](https://img.shields.io/david/dev/teads/hapiour.svg)](https://david-dm.org/teads/hapiour)
-[![npm license](https://img.shields.io/npm/l/hapiour.svg)](https://www.npmjs.org/package/hapiour)
+[![Build Status](https://travis-ci.org/Boulangerie/hapiour-decorators.svg?branch=master)](https://travis-ci.org/Boulangerie/hapiour-decorators)
+[![npm version](https://img.shields.io/npm/v/hapiour-decorators.svg)](https://www.npmjs.com/package/hapiour-decorators)
+[![npm downloads](https://img.shields.io/npm/dm/hapiour-decorators.svg?style=flat-square)](http://npm-stat.com/charts.html?package=hapiour&from=2016-10-01)
+[![dependencies](https://david-dm.org/Boulangerie/hapiour-decorators.svg)](https://david-dm.org/Boulangerie/hapiour-decorators)
+[![npm devDependencies](https://img.shields.io/david/dev/Boulangerie/hapiour-decorators.svg)](https://david-dm.org/Boulangerie/hapiour-decorators)
+[![npm license](https://img.shields.io/npm/l/hapiour-decorators.svg)](https://www.npmjs.org/package/hapiour-decorators)
 
-# hapiour
+# hapiour-decorators
 
 Typescript decorators for Hapi
 
@@ -14,7 +14,7 @@ Typescript decorators for Hapi
 ```bash
 npm install -g typescript
 npm install --save hapi
-npm install --save hapiour
+npm install --save hapiour-decorators
 ```
 
 # Example

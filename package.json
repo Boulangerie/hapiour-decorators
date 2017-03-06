@@ -1,10 +1,10 @@
 {
-  "name": "hapiour",
+  "name": "hapiour-decorators",
   "version": "1.0.6",
   "description": "Typescript decorators for Hapi",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/teads/hapiour.git"
+    "url": "git+https://github.com/Boulangerie/hapiour-decorators"
   },
   "main": "./build/hapiour",
   "typings": "./build/hapiour",
@@ -15,7 +15,7 @@
     "bump:minor": "npm version minor && git push --tags origin master",
     "bump:major": "npm version major && git push --tags origin master"
   },
-  "author": "alexandre.moatty@teads.tv",
+  "author": "alexandre.moatty@gmail.com",
   "license": "MIT",
   "dependencies": {
     "@types/hapi": "^13.0.37",

@@ -11,7 +11,7 @@ script:
 
 deploy:
   provider: npm
-  email: alexandre.moatty@teads.tv
+  email: alexandre.moatty@gmail.com
   api_key: $NPM_TOKEN
   on:
     tags: true
