@@ -1,3 +1,5 @@
+test
+
 [![Build Status](https://travis-ci.org/Boulangerie/hapiour-decorators.svg?branch=master)](https://travis-ci.org/Boulangerie/hapiour-decorators)
 [![npm version](https://img.shields.io/npm/v/hapiour-decorators.svg)](https://www.npmjs.com/package/hapiour-decorators)
 [![npm downloads](https://img.shields.io/npm/dm/hapiour-decorators.svg?style=flat-square)](http://npm-stat.com/charts.html?package=hapiour&from=2016-10-01)
