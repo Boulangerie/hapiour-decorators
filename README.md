@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/Boulangerie/hapiour-decorators.svg?branch=master)](https://travis-ci.org/Boulangerie/hapiour-decorators)
 [![npm version](https://img.shields.io/npm/v/hapiour-decorators.svg)](https://www.npmjs.com/package/hapiour-decorators)
-[![npm downloads](https://img.shields.io/npm/dm/hapiour-decorators.svg?style=flat-square)](http://npm-stat.com/charts.html?package=hapiour&from=2016-10-01)
+[![npm downloads](https://img.shields.io/npm/dm/hapiour-decorators.svg?style=flat-square)](http://npm-stat.com/charts.html?package=hapiour-decorators&from=2016-10-01)
 [![dependencies](https://david-dm.org/Boulangerie/hapiour-decorators.svg)](https://david-dm.org/Boulangerie/hapiour-decorators)
 [![npm devDependencies](https://img.shields.io/david/dev/Boulangerie/hapiour-decorators.svg)](https://david-dm.org/Boulangerie/hapiour-decorators)
 [![npm license](https://img.shields.io/npm/l/hapiour-decorators.svg)](https://www.npmjs.org/package/hapiour-decorators)
@@ -32,7 +32,7 @@ src/
 ### src/app.ts
 ```js
 import { Server } from 'hapi'
-import { App, IApp, Inject, Plugins } from 'hapiour'
+import { App, IApp, Inject, Plugins } from 'hapiour-decorators'
 import { Beer } from './beer.module'
 import { GreetingsPlugin } from './greetings.plugin'
 
@@ -71,7 +71,7 @@ export class MyApp implements IApp {
 ## Declare a module
 ### src/beer.module.ts
 ```js
-import { Route, Module } from 'hapiour'
+import { Route, Module } from 'hapiour-decorators'
 import { Request, IReply } from 'hapi'
 
 @Module({
@@ -157,7 +157,7 @@ export const GreetingsPlugin = new GreetingsPluginFactory()
 ## Bootstrap your app
 ### src/main.ts
 ```js
-import { bootstrap } from 'hapiour'
+import { bootstrap } from 'hapiour-decorators'
 import { MyApp } from './app'
 
 bootstrap(MyApp)
