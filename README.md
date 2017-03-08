@@ -25,7 +25,8 @@ src/
   -> main.ts
   -> app.ts
   -> beer.module.ts
-  -> greetings.plugin.ts
+  -> awesome.plugin.ts
+  -> health.plugin.ts
 ```
 
 ## Declare your app
@@ -34,31 +35,31 @@ src/
 import { Server } from 'hapi'
 import { App, IApp, Inject, Plugins } from 'hapiour-decorators'
 import { Beer } from './beer.module'
-import { GreetingsPlugin } from './greetings.plugin'
+import { AwesomePlugin } from './awesome.plugin'
+import { HealthPluginConfigurator } from './health.plugin'
 
 @App({
   port: 3000
 })
 @Inject([Beer])
-@Plugins([GreetingsPlugin])
+@Plugins([AwesomePlugin, HealthPluginConfigurator])
 export class MyApp implements IApp {
 
-  private server: Server
+  public server: Server
 
   public constructor(server: Server) {
     this.server = server
   }
 
-  public onPluginInit(err: any, done: () => void) {
-    if (err) {
-      console.log('Init error', err)
-    }
-    console.log('Plugin init')
-    done()
-  }
-
   public onInit(): void {
     console.log('Server init done')
+  }
+
+  public onRegister(): void {
+    // server decorated by the AwesomePlugin
+    if (this.server['isBeerAwesome']) {
+      console.log('Beer is awesome')
+    }
   }
 
   public onStart(): void {
@@ -123,35 +124,56 @@ export class Beer {
 }
 ```
 
-## Declare a plugin
-### src/greetings.plugin.ts
+## Declare and configure a plugin
+### src/health.plugin.ts
 ```js
+import { PluginConfigurator, IPluginConfigurator, IPluginOptions } from 'hapiour-decorators'
 import { Server } from 'hapi'
+import * as alive from 'hapi-alive'
 
-interface IRegister {
-  (server: Server, options: any, next: any): void
-  attributes?: any
-}
+@PluginConfigurator(alive)
+export class HealthPluginConfigurator implements IPluginConfigurator {
 
-class GreetingsPluginFactory {
-
-  public register: IRegister
+  public options: IPluginOptions
 
   public constructor() {
-    this.register = (server: Server, options: any, next: any) => {
-      console.log('Hey ! Welcome here young beer addict !')
-      next()
-    }
-
-    this.register.attributes = {
-      name: 'GreetingsPlugin',
-      version: '0.1.0'
+    this.options = {
+      path: '/health',
+      tags: ['health', 'monitor'],
+      healthCheck: this.healthCheck
     }
   }
 
-}
+  private healthCheck(server: Server, callback: () => void): void {
+    callback()
+  }
 
-export const GreetingsPlugin = new GreetingsPluginFactory()
+}
+```
+
+## Create a plugin
+### src/awesome.plugin.ts
+```js
+import { Plugin, IPlugin, IPluginOptions } from 'hapiour-decorators'
+import { Server } from 'hapi'
+
+@Plugin({
+  name: 'Awesome',
+  version: '0.1.0'
+})
+export class AwesomePlugin implements IPlugin {
+
+  public constructor() {
+  }
+
+  public register(server: Server, options: IPluginOptions, next: () => void): void {
+    server.decorate('server', 'isBeerAwesome', () => {
+      return true
+    })
+    next()
+  }
+
+}
 ```
 
 ## Bootstrap your app
@@ -169,7 +191,9 @@ bootstrap(MyApp)
 - `@App(config: Hapi.IServerConnectionOptions)` : Declare a new App (correspond to a new Hapi.Server instance).
 - `@Module(config: IModuleConfig)` : Declare a new Module (class containing routes).
 - `@Inject(modules: Array<Module>)` : Assign an array of modules to an App or a Module.
-- `@Plugins(plugins: Array<Plugin>)` : Assign an array of plugins to an App.
+- `@Plugins(plugins: Array<IPlugin|IPluginConfigurator>)` : Assign an array of plugins to an App.
+- `@Plugin(attributes: {'name': String, 'version': String})` : Declare a new plugin.
+- `@PluginConfigurator(plugin: IPlugin)` : Declare and configure a plugin.
 
 #### Method decorators
 - `@Route(config: Hapi.IRouteConfiguration)` : Declare a new Route inside a Module. The target method will become the route handler.
@@ -178,12 +202,18 @@ bootstrap(MyApp)
 
 #### IApp
 - `constructor(server: Hapi.Server)` : App will be constructed with Hapi server instance as first argument.
-- `onPluginInit(err: any, done: () => void)`: Method called when Hapi plugin registration is done. If this method is defined, you must call done() to continue server initialization.
 - `onInit()`: Method called when Hapi server initialization is done.
+- `onRegister()`: Method called when Hapi plugin registration is done.
 - `onStart()`: Method called when Hapi server is started.
 
 #### IModuleConfig
 - `basePath: string` : Base path applied to all contained routes in the module.
 
+#### IPlugin
+- `register(server: Server, options: IPluginOptions, next: () => void): void` : Plugin core function to be registered into Hapi.
+
+#### IPluginConfigurator
+- `options: IPluginOptions` : Options used to configure a given plugin.
+
 ### Methods
-- `bootstrap(...apps: Array<IApp>)` : Bootstrap your apps.
+- `bootstrap(...apps: Array<IApp>): Array<IApp>` : Bootstrap your apps. Return an array of bootstraped apps.

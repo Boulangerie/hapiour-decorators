@@ -9,7 +9,7 @@
   "main": "./build/hapiour",
   "typings": "./build/hapiour",
   "scripts": {
-    "test": "mocha -r ts-node/register ./integration-tests/tests/*.suite.ts",
+    "test": "mocha -t 5000 -r ts-node/register ./integration-tests/tests/*.suite.ts",
     "prepublish": "tsc",
     "bump": "npm version patch && git push --tags origin master",
     "bump:minor": "npm version minor && git push --tags origin master",
@@ -21,8 +21,11 @@
     "@types/hapi": "^16.0.0",
     "@types/lodash": "^4.14.44",
     "@types/node": "^6.0.0",
+    "@types/reflect-metadata": "0.0.5",
     "hapi": "^16.1.0",
-    "lodash": "^4.17.3"
+    "hapi-alive": "^1.4.0",
+    "lodash": "^4.17.3",
+    "reflect-metadata": "^0.1.10"
   },
   "devDependencies": {
     "@types/bluebird": "^3.0.36",
