@@ -22,7 +22,7 @@ class BootstrapFactory {
 
 }
 
-export let Bootstrap = new BootstrapFactory()
+export const Bootstrap = new BootstrapFactory()
 
 export interface ITestedApp extends IApp {
   server?: Server

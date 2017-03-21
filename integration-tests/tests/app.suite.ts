@@ -24,30 +24,12 @@ describe('App', () => {
     expect(Bootstrap.app).to.have.property('server').and.to.be.an.instanceOf(Server)
   })
 
-  // it('should call onInit function', (done) => {
-  //   Bootstrap.app.server.on('onInit', () => {
-  //     done()
-  //   })
-  // })
-
-  // it('should call onRegister function', (done) => {
-  //   Bootstrap.app.server.on('onRegister', () => {
-  //     done()
-  //   })
-  // })
-
   it('should have awesome plugin loaded', (done) => {
     setTimeout(() => {
       expect(Bootstrap.app).to.have.property('server').and.to.have.property('isBeerAwesome')
       done()
     }, 1000)
   })
-
-  // it('should call onStart function', (done) => {
-  //   Bootstrap.app.server.on('onStart', () => {
-  //     done()
-  //   })
-  // })
 
   describe('Beer module', () => {
 

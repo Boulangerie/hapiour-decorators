@@ -10,8 +10,8 @@ const DEFAULT_APP_CONFIG = {
 export function bootstrap(...BootstrapedApps: Array<IAppStatic>): IApp {
   let apps: Array<IApp> = []
   for (let BootstrapedApp of BootstrapedApps) {
-    let server: Server = new Server()
-    let app: IApp = new BootstrapedApp(server)
+    const server: Server = new Server()
+    const app: IApp = new BootstrapedApp(server)
 
     server.connection(_.extend(Reflect.getMetadata('hapiour:config', BootstrapedApp), DEFAULT_APP_CONFIG))
     try {app.onInit()} catch(err) {}
@@ -57,10 +57,9 @@ function getRoutesWithConfigRecurs(item: IAppStatic|IModuleStatic, parent?: IApp
       let config: IModuleConfig = Reflect.getMetadata('hapiour:config', Mod)
       let modRoutes: Array<IRouteConfiguration> = _.cloneDeep(Reflect.getMetadata('hapiour:routes', Mod))
       let mod: IModule = new Mod()
-      modRoutes = _.map(modRoutes, (route: IRouteConfiguration) => {
+      modRoutes = _.each(modRoutes, (route: IRouteConfiguration) => {
         route.path = _.get(parentConfig, 'basePath', '') + config.basePath + route.path
         route.handler = (<Function>route.handler).bind(mod)
-        return route
       })
       routes = _.concat(routes, modRoutes, getRoutesWithConfigRecurs(Mod, item))
     }
