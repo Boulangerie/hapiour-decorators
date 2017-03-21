@@ -1,23 +1,28 @@
+import 'reflect-metadata'
 import * as Promise from 'bluebird'
 import { Server } from 'hapi'
-import { IApp, App } from '../../lib/core/app.class'
-import { bootstrap } from '../../lib/hapiour'
+import { bootstrap, IApp } from '../../lib/hapiour'
 import { MyApp } from '../app/app'
 
 
-export class Bootstrap {
+class BootstrapFactory {
 
-  public static app: ITestedApp = App.apps.get('MyApp')
+  public app: ITestedApp
 
-  public static start(): void {
-    bootstrap(MyApp)
+  public constructor() {
   }
 
-  public static stop(): Promise<void> {
+  public start(): void {
+    this.app = bootstrap(MyApp)[0]
+  }
+
+  public stop(): Promise<void> {
     return <Promise<void>>this.app.server.stop()
   }
 
 }
+
+export const Bootstrap = new BootstrapFactory()
 
 export interface ITestedApp extends IApp {
   server?: Server

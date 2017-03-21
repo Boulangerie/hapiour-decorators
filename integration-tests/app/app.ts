@@ -1,13 +1,14 @@
 import { Server } from 'hapi'
 import { App, IApp, Inject, Plugins } from '../../lib/hapiour'
 import { Beer } from './beer.module'
-import { GreetingsPlugin } from './greetings.plugin'
+import { AwesomePlugin } from './awesome.plugin'
+import { HealthPluginConfigurator } from './health.plugin'
 
 @App({
   port: 3000
 })
 @Inject([Beer])
-@Plugins([GreetingsPlugin])
+@Plugins([AwesomePlugin, HealthPluginConfigurator])
 export class MyApp implements IApp {
 
   public server: Server
@@ -16,16 +17,14 @@ export class MyApp implements IApp {
     this.server = server
   }
 
-  public onPluginInit(err: any, done: () => void) {
-    if (err) {
-      console.log('Init error', err)
-    }
-    console.log('Plugin init')
-    done()
-  }
-
   public onInit(): void {
     console.log('Server init done')
+  }
+
+  public onRegister(): void {
+    if (this.server['isBeerAwesome']) {
+      console.log('Beer is awesome')
+    }
   }
 
   public onStart(): void {

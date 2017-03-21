@@ -1,60 +1,66 @@
 import * as _ from 'lodash'
+import 'reflect-metadata'
 import { IRouteConfiguration, IReply, Request, IServerConnectionOptions } from 'hapi'
-import { App, IApp, IUserApp } from './app.class'
-import { Module, IModule, IModuleConfig } from './module.class'
-import { Store } from '../utils/store.class'
+import { IApp, IPlugin, IPluginStatic, IPluginConfigurator, IPluginConfiguratorStatic, IModule, IModuleConfig, IRegister } from './interfaces'
 
 export function AppDecorator(config: IServerConnectionOptions): Function {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
 
-    // create and store app instance
-    let app: IApp = new App(target.name, _.clone(config), target)
-    App.apps.add(app.name, app)
+    Reflect.defineMetadata('hapiour:config', config, target)
+
   }
 }
 
-export function InjectDecorator(Modules: Array<any>): Function {
+export function InjectDecorator(Modules: Array<IModule>): Function {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
 
-    // make relation between App/Module and Modules
-    for (let Mod of Modules) {
-      Module.modulesMapping.add(target.name, Mod.name)
-    }
+    Reflect.defineMetadata('hapiour:modules', Modules, target)
+
   }
 }
 
-export function PluginsDecorator(Plugins: Array<any>): Function {
+export function PluginsDecorator(Plugins: Array<IPluginStatic|IPlugin|IPluginConfiguratorStatic|Array<IPluginStatic|IPlugin|IPluginConfiguratorStatic>>): Function {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
 
-    // add plugins too the register stack
-    App.pluginsMapping.add(target.name, Plugins)
+    Reflect.defineMetadata('hapiour:plugins', Plugins, target)
+
+  }
+}
+
+export function PluginDecorator(attributes: any): Function {
+  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+
+    Reflect.defineMetadata('hapiour:attributes', attributes, target)
+
+  }
+}
+
+export function PluginConfiguratorDecorator(Plugin: any): Function {
+  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+
+    Reflect.defineMetadata('hapiour:register', Plugin, target)
+
   }
 }
 
 export function ModuleDecorator(config: IModuleConfig): Function {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
 
-    // get referenced routes and update path
-    let userMod: any = new target()
-    for (let route of Module.routes.getAll(target.name)) {
-      route.handler = (<Function>route.handler).bind(userMod)
-    }
+    Reflect.defineMetadata('hapiour:config', config, target)
 
-    // create and store module instance
-    let mod: IModule = new Module(target.name)
-    Module.modules.add(mod.name, mod)
-
-    // store module config
-    Module.configs.add(mod.name, config)
   }
 }
 
 export function RouteDecorator(config: IRouteConfiguration): Function {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
 
-    // update handler and store route
-    let route: IRouteConfiguration = _.clone(config)
-    route.handler = descriptor.value
-    Module.routes.add(target.constructor.name, route)
+    let routes: Array<IRouteConfiguration> = []
+    if (Reflect.hasMetadata('hapiour:routes', target.constructor)) {
+      routes = Reflect.getMetadata('hapiour:routes', target.constructor)
+    }
+    config.handler = descriptor.value
+    routes.push(config)
+    Reflect.defineMetadata('hapiour:routes', routes, target.constructor)
+
   }
 }
