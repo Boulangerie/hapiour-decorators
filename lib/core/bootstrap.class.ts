@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { Server, IRouteConfiguration } from 'hapi'
+import { Server, RouteConfiguration } from 'hapi'
 import { IApp, IAppStatic, IAppConfig, IModule, IModuleStatic, IModuleConfig, IPlugin, IPluginStatic, IPluginConfigurator, IPluginConfiguratorStatic, IRegister } from './interfaces'
 import * as _ from 'lodash'
 
@@ -48,16 +48,16 @@ function getPluginsRecurs(Plugins: Array<IPluginStatic|IPlugin|IPluginConfigurat
   return plugins
 }
 
-function getRoutesWithConfigRecurs(item: IAppStatic|IModuleStatic, parent?: IAppStatic|IModuleStatic): Array<IRouteConfiguration> {
-  let routes: Array<IRouteConfiguration> = []
+function getRoutesWithConfigRecurs(item: IAppStatic|IModuleStatic, parent?: IAppStatic|IModuleStatic): Array<RouteConfiguration> {
+  let routes: Array<RouteConfiguration> = []
   if (Reflect.hasMetadata('hapiour:modules', item)) {
     let modules: Array<IModuleStatic> = Reflect.getMetadata('hapiour:modules', item)
     let parentConfig: IModuleConfig = (parent) ? Reflect.getMetadata('hapiour:config', parent): {}
     for (let Mod of modules) {
       let config: IModuleConfig = Reflect.getMetadata('hapiour:config', Mod)
-      let modRoutes: Array<IRouteConfiguration> = _.cloneDeep(Reflect.getMetadata('hapiour:routes', Mod))
+      let modRoutes: Array<RouteConfiguration> = _.cloneDeep(Reflect.getMetadata('hapiour:routes', Mod))
       let mod: IModule = new Mod()
-      modRoutes = _.each(modRoutes, (route: IRouteConfiguration) => {
+      modRoutes = _.each(modRoutes, (route: RouteConfiguration) => {
         route.path = _.get(parentConfig, 'basePath', '') + config.basePath + route.path
         route.handler = (<Function>route.handler).bind(mod)
       })

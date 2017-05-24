@@ -1,9 +1,8 @@
-import * as _ from 'lodash'
 import 'reflect-metadata'
-import { IRouteConfiguration, IReply, Request, IServerConnectionOptions } from 'hapi'
+import { RouteConfiguration, Request, ServerConnectionOptions } from 'hapi'
 import { IApp, IPlugin, IPluginStatic, IPluginConfigurator, IPluginConfiguratorStatic, IModule, IModuleConfig, IRegister } from './interfaces'
 
-export function AppDecorator(config: IServerConnectionOptions): Function {
+export function AppDecorator(config: ServerConnectionOptions): Function {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
 
     Reflect.defineMetadata('hapiour:config', config, target)
@@ -51,10 +50,10 @@ export function ModuleDecorator(config: IModuleConfig): Function {
   }
 }
 
-export function RouteDecorator(config: IRouteConfiguration): Function {
+export function RouteDecorator(config: RouteConfiguration): Function {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
 
-    let routes: Array<IRouteConfiguration> = []
+    let routes: Array<RouteConfiguration> = []
     if (Reflect.hasMetadata('hapiour:routes', target.constructor)) {
       routes = Reflect.getMetadata('hapiour:routes', target.constructor)
     }

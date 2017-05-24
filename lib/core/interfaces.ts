@@ -1,4 +1,4 @@
-import { Server, IRouteConfiguration } from 'hapi'
+import { Server, RouteConfiguration } from 'hapi'
 
 export type IPluginOptions = Object
 

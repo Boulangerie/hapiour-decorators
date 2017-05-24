@@ -73,7 +73,7 @@ export class MyApp implements IApp {
 ### src/beer.module.ts
 ```js
 import { Route, Module } from 'hapiour-decorators'
-import { Request, IReply } from 'hapi'
+import { Request, ReplyNoContinue } from 'hapi'
 
 @Module({
   basePath: '/beer'
@@ -91,7 +91,7 @@ export class Beer {
     path: '',
     config: {}
   })
-  public getABeer(request: Request, reply: IReply) {
+  public getABeer(request: Request, reply: ReplyNoContinue) {
     this.beerCount++
     reply({
       'data': 'Hey! Take this beer !'
@@ -103,7 +103,7 @@ export class Beer {
     path: '/count',
     config: {}
   })
-  public getCount(request: Request, reply: IReply) {
+  public getCount(request: Request, reply: ReplyNoContinue) {
     reply({
       'data': this.beerCount
     })
@@ -114,7 +114,7 @@ export class Beer {
     path: '/count',
     config: {}
   })
-  public resetCount(request: Request, reply: IReply) {
+  public resetCount(request: Request, reply: ReplyNoContinue) {
     this.beerCount = 0
     reply({
       'data': 'Done'
