@@ -15,6 +15,10 @@
     "bump:minor": "npm version minor && git push --tags origin master",
     "bump:major": "npm version major && git push --tags origin master"
   },
+  "engines" : {
+    "node": ">=8.0.0",
+    "npm": ">=5.0.0"
+  },
   "author": "alexandre.moatty@gmail.com",
   "license": "MIT",
   "dependencies": {
@@ -26,18 +30,18 @@
   },
   "devDependencies": {
     "@types/bluebird": "^3.0.36",
-    "@types/chai": "^3.4.34",
+    "@types/chai": "^4.0.1",
     "@types/lodash": "^4.14.55",
     "@types/mocha": "^2.2.35",
     "@types/request": "~0.0.37",
     "@types/winston": "^2.2.0",
     "bluebird": "^3.4.7",
-    "chai": "^3.5.0",
+    "chai": "^4.0.2",
     "hapi-alive": "^1.4.0",
     "mocha": "^3.2.0",
     "request": "^2.79.0",
-    "ts-node": "^2.1.0",
-    "typescript": "^2.1.4",
+    "ts-node": "^3.1.0",
+    "typescript": "^2.4.1",
     "winston": "^2.3.0"
   }
 }

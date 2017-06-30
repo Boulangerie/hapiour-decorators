@@ -1,5 +1,4 @@
 import 'reflect-metadata'
-import * as Promise from 'bluebird'
 import { Server } from 'hapi'
 import { bootstrap, IApp } from '../../lib/hapiour'
 import { MyApp } from '../app/app'
@@ -16,8 +15,8 @@ class BootstrapFactory {
     this.app = bootstrap(MyApp)[0]
   }
 
-  public stop(): Promise<void> {
-    return <Promise<void>>this.app.server.stop()
+  public stop(): Promise<Error> {
+    return this.app.server.stop()
   }
 
 }

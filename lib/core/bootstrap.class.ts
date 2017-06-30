@@ -7,7 +7,7 @@ const DEFAULT_APP_CONFIG = {
   port: 3000
 }
 
-export function bootstrap(...BootstrapedApps: Array<IAppStatic>): IApp {
+export function bootstrap(...BootstrapedApps: Array<IAppStatic>): Array<IApp> {
   let apps: Array<IApp> = []
   for (let BootstrapedApp of BootstrapedApps) {
     const server: Server = new Server()
