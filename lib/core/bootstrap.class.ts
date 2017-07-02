@@ -15,13 +15,23 @@ export function bootstrap(...BootstrapedApps: Array<IAppStatic>): Array<IApp> {
 
     server.connection(_.extend(Reflect.getMetadata('hapiour:config', BootstrapedApp), DEFAULT_APP_CONFIG))
     try {app.onInit()} catch(err) {}
-    server.register(getPluginsRecurs(Reflect.getMetadata('hapiour:plugins', BootstrapedApp)), (err: any) => {
+    const plugins: Array<IPlugin> = getPluginsRecurs(Reflect.getMetadata('hapiour:plugins', BootstrapedApp))
+    const routes: Array<RouteConfiguration> = getRoutesWithConfigRecurs(BootstrapedApp)
+    if (_.isEmpty(plugins)) {
       try {app.onRegister()} catch(err) {}
-      server.route(getRoutesWithConfigRecurs(BootstrapedApp))
+      server.route(routes)
       server.start((err: any) => {
         try {app.onStart()} catch(err) {}
       })
-    })
+    } else {
+      server.register(plugins, (err: any) => {
+        try {app.onRegister()} catch(err) {}
+        server.route(routes)
+        server.start((err: any) => {
+          try {app.onStart()} catch(err) {}
+        })
+      })
+    }
     apps.push(app)
   }
   return apps
@@ -29,20 +39,22 @@ export function bootstrap(...BootstrapedApps: Array<IAppStatic>): Array<IApp> {
 
 function getPluginsRecurs(Plugins: Array<IPluginStatic|IPlugin|IPluginConfiguratorStatic|Array<IPluginStatic|IPlugin|IPluginConfiguratorStatic>>): Array<IPlugin> {
   let plugins: Array<IPlugin> = []
-  for (let Plugin of Plugins) {
-    if (Plugin instanceof Array) {
-      plugins = _.concat(plugins, getPluginsRecurs(Plugin))
-    } else if (Plugin['register']) {
-      plugins.push(<IPlugin>Plugin)
-    } else {
-      let plugin: IPlugin = new (<IPluginStatic>Plugin)()
-      if (Reflect.hasMetadata('hapiour:register', Plugin)) {
-        plugin.register = Reflect.getMetadata('hapiour:register', Plugin)
-      } else if (Reflect.hasMetadata('hapiour:attributes', Plugin)) {
-        plugin.register = plugin.register.bind(plugin)
-        plugin.register.attributes = Reflect.getMetadata('hapiour:attributes', Plugin)
+  if (_.isArray(Plugins)) {
+    for (let Plugin of Plugins) {
+      if (Plugin instanceof Array) {
+        plugins = _.concat(plugins, getPluginsRecurs(Plugin))
+      } else if (Plugin['register']) {
+        plugins.push(<IPlugin>Plugin)
+      } else {
+        let plugin: IPlugin = new (<IPluginStatic>Plugin)()
+        if (Reflect.hasMetadata('hapiour:register', Plugin)) {
+          plugin.register = Reflect.getMetadata('hapiour:register', Plugin)
+        } else if (Reflect.hasMetadata('hapiour:attributes', Plugin)) {
+          plugin.register = plugin.register.bind(plugin)
+          plugin.register.attributes = Reflect.getMetadata('hapiour:attributes', Plugin)
+        }
+        plugins.push(plugin)
       }
-      plugins.push(plugin)
     }
   }
   return plugins
