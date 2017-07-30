@@ -185,6 +185,16 @@ import { MyApp } from './app'
 bootstrap(MyApp)
 ```
 
+## Bootstrap your app w/ IoC container
+### src/main.ts
+```js
+import { bootstrap } from 'hapiour-decorators'
+import { MyApp } from './app'
+import { Container } from 'typedi';
+
+bootstrapWithContainer(Container, MyApp)
+```
+
 ## API
 ### Decorators
 #### Class Decorators

@@ -1,5 +1,6 @@
 import { Route, Module } from '../../lib/hapiour'
 import { Request, ReplyNoContinue } from 'hapi'
+import { TestService } from './test.service';
 
 @Module({
   basePath: '/beer'
@@ -8,7 +9,7 @@ export class Beer {
 
   private beerCount: number
 
-  public constructor() {
+  public constructor(private ts: TestService) {
     this.beerCount = 0
   }
 
@@ -32,6 +33,17 @@ export class Beer {
   public getCount(request: Request, reply: ReplyNoContinue) {
     reply({
       'data': this.beerCount
+    })
+  }
+
+  @Route({
+    method: 'GET',
+    path: '/test',
+    config: {}
+  })
+  public getTest(request: Request, reply: ReplyNoContinue) {
+    reply({
+      'data': this.ts.test()
     })
   }
 

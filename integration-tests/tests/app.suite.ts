@@ -1,7 +1,8 @@
 import { expect } from 'chai'
 import { Server } from 'hapi'
-import { Bootstrap } from '../shared/bootstrap'
+import { Bootstrap, BootstrapFactory } from '../shared/bootstrap'
 import { Requester } from '../shared/requester'
+import { Container } from "typedi";
 
 var requester: Requester
 
@@ -107,5 +108,37 @@ describe('App', () => {
 
   })
 
+
+
+})
+
+describe('App With IoC', () => {
+  before(() => {
+    requester = new Requester('http://127.0.0.1:3000')
+    new BootstrapFactory(Container).start()
+  })
+
+  after((done) => {
+    Bootstrap
+      .stop()
+      .then(() => {
+        done()
+      })
+  })
+    
+  it('should be see injected class', (done) => {
+
+    var isHealthy: any = {
+      'url': '/beer/test',
+      'method': 'GET'
+    }
+    requester
+      .request(isHealthy)
+      .then((res) => {
+        expect(res).to.have.property('statusCode').and.equal(200)
+        expect(res).to.have.property('body').and.to.have.property('data').equal('Tested IoC!')
+        done()
+      })
+  })
 })
 
