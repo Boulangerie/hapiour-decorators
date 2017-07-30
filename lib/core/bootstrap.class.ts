@@ -90,12 +90,10 @@ function getRoutesWithConfigRecurs(item: IAppStatic | IModuleStatic, parent?: IA
  * Gets the IOC container used by this library.
  */
 export function getFromContainer(someClass: IModuleStatic | IPluginStatic): any {
-  if (userContainer) {
-    try {
-      return userContainer.get(someClass);
-    } catch (error) {
-      throw error;
-    }
+  if (!userContainer) return new someClass();
+  try {
+    return userContainer.get(someClass);
+  } catch (error) {
+    throw error;
   }
-  return new someClass();
 }
