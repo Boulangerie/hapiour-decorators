@@ -53,7 +53,7 @@ function getPluginsRecurs(Plugins: Array<IPluginStatic | IPlugin | IPluginConfig
       } else if (Plugin['register']) {
         plugins.push(<IPlugin>Plugin)
       } else {
-        let plugin: IPlugin = getFromContainer(Plugin as IPluginStatic) //new (<IPluginStatic>Plugin)()
+        let plugin: IPlugin = getFromContainer(Plugin as IPluginStatic)
         if (Reflect.hasMetadata('hapiour:register', Plugin)) {
           plugin.register = Reflect.getMetadata('hapiour:register', Plugin)
         } else if (Reflect.hasMetadata('hapiour:attributes', Plugin)) {
