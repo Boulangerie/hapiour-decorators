@@ -7,6 +7,8 @@ const DEFAULT_APP_CONFIG = {
   port: 3000
 }
 
+let userContainer: { get<T>(someClass: { new(...args: any[]): T } | Function): T };
+
 export function bootstrap(...BootstrapedApps: Array<IAppStatic>): Array<IApp> {
   let apps: Array<IApp> = []
   for (let BootstrapedApp of BootstrapedApps) {
@@ -14,21 +16,21 @@ export function bootstrap(...BootstrapedApps: Array<IAppStatic>): Array<IApp> {
     const app: IApp = new BootstrapedApp(server)
 
     server.connection(_.extend(Reflect.getMetadata('hapiour:config', BootstrapedApp), DEFAULT_APP_CONFIG))
-    try {app.onInit()} catch(err) {}
+    try { app.onInit() } catch (err) { }
     const plugins: Array<IPlugin> = getPluginsRecurs(Reflect.getMetadata('hapiour:plugins', BootstrapedApp))
     const routes: Array<RouteConfiguration> = getRoutesWithConfigRecurs(BootstrapedApp)
     if (_.isEmpty(plugins)) {
-      try {app.onRegister()} catch(err) {}
+      try { app.onRegister() } catch (err) { }
       server.route(routes)
       server.start((err: any) => {
-        try {app.onStart()} catch(err) {}
+        try { app.onStart() } catch (err) { }
       })
     } else {
       server.register(plugins, (err: any) => {
-        try {app.onRegister()} catch(err) {}
+        try { app.onRegister() } catch (err) { }
         server.route(routes)
         server.start((err: any) => {
-          try {app.onStart()} catch(err) {}
+          try { app.onStart() } catch (err) { }
         })
       })
     }
@@ -37,7 +39,12 @@ export function bootstrap(...BootstrapedApps: Array<IAppStatic>): Array<IApp> {
   return apps
 }
 
-function getPluginsRecurs(Plugins: Array<IPluginStatic|IPlugin|IPluginConfiguratorStatic|Array<IPluginStatic|IPlugin|IPluginConfiguratorStatic>>): Array<IPlugin> {
+export function bootstrapWithContainer(iocContainer: { get(someClass: any): any }, ...BootstrapedApps: Array<IAppStatic>): Array<IApp> {
+  userContainer = iocContainer;
+  return bootstrap(...BootstrapedApps);
+}
+
+function getPluginsRecurs(Plugins: Array<IPluginStatic | IPlugin | IPluginConfiguratorStatic | Array<IPluginStatic | IPlugin | IPluginConfiguratorStatic>>): Array<IPlugin> {
   let plugins: Array<IPlugin> = []
   if (_.isArray(Plugins)) {
     for (let Plugin of Plugins) {
@@ -46,7 +53,7 @@ function getPluginsRecurs(Plugins: Array<IPluginStatic|IPlugin|IPluginConfigurat
       } else if (Plugin['register']) {
         plugins.push(<IPlugin>Plugin)
       } else {
-        let plugin: IPlugin = new (<IPluginStatic>Plugin)()
+        let plugin: IPlugin = getFromContainer(Plugin as IPluginStatic) //new (<IPluginStatic>Plugin)()
         if (Reflect.hasMetadata('hapiour:register', Plugin)) {
           plugin.register = Reflect.getMetadata('hapiour:register', Plugin)
         } else if (Reflect.hasMetadata('hapiour:attributes', Plugin)) {
@@ -60,15 +67,15 @@ function getPluginsRecurs(Plugins: Array<IPluginStatic|IPlugin|IPluginConfigurat
   return plugins
 }
 
-function getRoutesWithConfigRecurs(item: IAppStatic|IModuleStatic, parent?: IAppStatic|IModuleStatic): Array<RouteConfiguration> {
+function getRoutesWithConfigRecurs(item: IAppStatic | IModuleStatic, parent?: IAppStatic | IModuleStatic): Array<RouteConfiguration> {
   let routes: Array<RouteConfiguration> = []
   if (Reflect.hasMetadata('hapiour:modules', item)) {
     let modules: Array<IModuleStatic> = Reflect.getMetadata('hapiour:modules', item)
-    let parentConfig: IModuleConfig = (parent) ? Reflect.getMetadata('hapiour:config', parent): {}
+    let parentConfig: IModuleConfig = (parent) ? Reflect.getMetadata('hapiour:config', parent) : {}
     for (let Mod of modules) {
       let config: IModuleConfig = Reflect.getMetadata('hapiour:config', Mod)
       let modRoutes: Array<RouteConfiguration> = _.cloneDeep(Reflect.getMetadata('hapiour:routes', Mod))
-      let mod: IModule = new Mod()
+      let mod: IModule = getFromContainer(Mod);
       modRoutes = _.each(modRoutes, (route: RouteConfiguration) => {
         route.path = _.get(parentConfig, 'basePath', '') + config.basePath + route.path
         route.handler = (<Function>route.handler).bind(mod)
@@ -77,4 +84,18 @@ function getRoutesWithConfigRecurs(item: IAppStatic|IModuleStatic, parent?: IApp
     }
   }
   return routes
+}
+
+/**
+ * Gets the IOC container used by this library.
+ */
+export function getFromContainer(someClass: IModuleStatic | IPluginStatic): any {
+  if (userContainer) {
+    try {
+      return userContainer.get(someClass);
+    } catch (error) {
+      throw error;
+    }
+  }
+  return new someClass();
 }

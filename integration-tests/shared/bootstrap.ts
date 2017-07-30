@@ -1,18 +1,22 @@
 import 'reflect-metadata'
 import { Server } from 'hapi'
-import { bootstrap, IApp } from '../../lib/hapiour'
+import { bootstrap, IApp, bootstrapWithContainer } from '../../lib/hapiour'
 import { MyApp } from '../app/app'
 
 
-class BootstrapFactory {
+export class BootstrapFactory {
 
   public app: ITestedApp
 
-  public constructor() {
+  public constructor(private container = undefined) {
   }
 
   public start(): void {
-    this.app = bootstrap(MyApp)[0]
+    if (this.container) {
+      this.app = bootstrapWithContainer(this.container, MyApp)[0]
+    } else {
+      this.app = bootstrap(MyApp)[0]
+    }
   }
 
   public stop(): Promise<Error> {
