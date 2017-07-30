@@ -1,5 +1,6 @@
 import { Route, Module } from '../../lib/hapiour'
 import { Request, ReplyNoContinue } from 'hapi'
+import { InjectedService } from './injected.service'
 
 @Module({
   basePath: '/beer'
@@ -7,9 +8,11 @@ import { Request, ReplyNoContinue } from 'hapi'
 export class Beer {
 
   private beerCount: number
+  private injectedService: InjectedService
 
-  public constructor() {
+  public constructor(injectedService: InjectedService) {
     this.beerCount = 0
+    this.injectedService = injectedService
   }
 
   @Route({
@@ -32,6 +35,17 @@ export class Beer {
   public getCount(request: Request, reply: ReplyNoContinue) {
     reply({
       'data': this.beerCount
+    })
+  }
+
+  @Route({
+    method: 'GET',
+    path: '/di',
+    config: {}
+  })
+  public getInjectedService(request: Request, reply: ReplyNoContinue) {
+    reply({
+      'data': this.injectedService.isInjected()
     })
   }
 

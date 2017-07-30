@@ -185,6 +185,19 @@ import { MyApp } from './app'
 bootstrap(MyApp)
 ```
 
+## Or you can Bootstrap your app with options
+### src/main.ts
+In this example apps are bootstraped with an external dependency injection library `typedi`
+```js
+import { bootstrap } from 'hapiour-decorators'
+import { MyApp } from './app'
+import { Container } from 'typedi';
+
+bootstrapWithOptions([MyApp], {
+  injector: Container
+})
+```
+
 ## API
 ### Decorators
 #### Class Decorators
@@ -215,5 +228,12 @@ bootstrap(MyApp)
 #### IPluginConfigurator
 - `options: IPluginOptions` : Options used to configure a given plugin.
 
+#### IBootstrapOptions
+- `injector?: IInjector` : Set a custom injector to your apps.
+
+#### IInjector
+- `get<T>(Dependency: IStatic<T>): T` : Injector should at least have a get method to get dependencies.
+
 ### Methods
 - `bootstrap(...apps: Array<IApp>): Array<IApp>` : Bootstrap your apps. Return an array of bootstraped apps.
+- `bootstrapWithOptions(apps: Array<IApp>, options: IBootstrapOptions): Array<IApp>` : Bootstrap your apps with options. Return an array of bootstraped apps.

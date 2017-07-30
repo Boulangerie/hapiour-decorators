@@ -1,4 +1,7 @@
-import { bootstrap } from '../../lib/hapiour'
+import { bootstrapWithOptions } from '../../lib/hapiour'
 import { MyApp } from './app'
+import { Container } from 'typedi'
 
-bootstrap(MyApp)
+bootstrapWithOptions([MyApp], {
+  injector: Container
+})
