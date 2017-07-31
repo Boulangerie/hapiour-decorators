@@ -1,6 +1,6 @@
 import 'reflect-metadata'
-import { RouteConfiguration, Request, ServerConnectionOptions } from 'hapi'
-import { IApp, IPlugin, IPluginStatic, IPluginConfigurator, IPluginConfiguratorStatic, IModule, IModuleConfig, IRegister } from './interfaces'
+import { RouteConfiguration, ServerConnectionOptions } from 'hapi'
+import { IPlugin, IPluginStatic, IPluginConfiguratorStatic, IModule, IModuleConfig } from './interfaces'
 
 export function AppDecorator(config: ServerConnectionOptions): Function {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
