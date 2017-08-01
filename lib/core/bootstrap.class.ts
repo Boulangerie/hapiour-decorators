@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { Server, RouteConfiguration } from 'hapi'
-import { IApp, IAppStatic, IAppConfig, IModule, IModuleStatic, IModuleConfig, IPlugin, IPluginStatic, IPluginConfigurator, IPluginConfiguratorStatic, IRegister } from './interfaces'
+import { IApp, IAppStatic, IModule, IModuleStatic, IModuleConfig, IPlugin, IPluginStatic, IPluginConfiguratorStatic } from './interfaces'
 import * as _ from 'lodash'
 
 const DEFAULT_APP_CONFIG = {
@@ -8,27 +8,36 @@ const DEFAULT_APP_CONFIG = {
 }
 
 export function bootstrap(...BootstrapedApps: Array<IAppStatic>): Array<IApp> {
-  let apps: Array<IApp> = []
-  for (let BootstrapedApp of BootstrapedApps) {
+  const apps: Array<IApp> = []
+  for (const BootstrapedApp of BootstrapedApps) {
     const server: Server = new Server()
     const app: IApp = new BootstrapedApp(server)
 
     server.connection(_.extend(Reflect.getMetadata('hapiour:config', BootstrapedApp), DEFAULT_APP_CONFIG))
-    try {app.onInit()} catch(err) {}
+    _.invoke(app, 'onInit')
     const plugins: Array<IPlugin> = getPluginsRecurs(Reflect.getMetadata('hapiour:plugins', BootstrapedApp))
     const routes: Array<RouteConfiguration> = getRoutesWithConfigRecurs(BootstrapedApp)
     if (_.isEmpty(plugins)) {
-      try {app.onRegister()} catch(err) {}
+      _.invoke(app, 'onRegister')
       server.route(routes)
       server.start((err: any) => {
-        try {app.onStart()} catch(err) {}
+        if (err) {
+          throw new Error(err)
+        }
+        _.invoke(app, 'onStart')
       })
     } else {
-      server.register(plugins, (err: any) => {
-        try {app.onRegister()} catch(err) {}
+      server.register(plugins, (registerErr: any) => {
+        if (registerErr) {
+          throw new Error(registerErr)
+        }
+        _.invoke(app, 'onRegister')
         server.route(routes)
-        server.start((err: any) => {
-          try {app.onStart()} catch(err) {}
+        server.start((startErr: any) => {
+          if (startErr) {
+            throw new Error(startErr)
+          }
+          _.invoke(app, 'onStart')
         })
       })
     }
@@ -40,13 +49,13 @@ export function bootstrap(...BootstrapedApps: Array<IAppStatic>): Array<IApp> {
 function getPluginsRecurs(Plugins: Array<IPluginStatic|IPlugin|IPluginConfiguratorStatic|Array<IPluginStatic|IPlugin|IPluginConfiguratorStatic>>): Array<IPlugin> {
   let plugins: Array<IPlugin> = []
   if (_.isArray(Plugins)) {
-    for (let Plugin of Plugins) {
+    for (const Plugin of Plugins) {
       if (Plugin instanceof Array) {
         plugins = _.concat(plugins, getPluginsRecurs(Plugin))
       } else if (Plugin['register']) {
         plugins.push(<IPlugin>Plugin)
       } else {
-        let plugin: IPlugin = new (<IPluginStatic>Plugin)()
+        const plugin: IPlugin = new (<IPluginStatic>Plugin)()
         if (Reflect.hasMetadata('hapiour:register', Plugin)) {
           plugin.register = Reflect.getMetadata('hapiour:register', Plugin)
         } else if (Reflect.hasMetadata('hapiour:attributes', Plugin)) {
@@ -63,12 +72,12 @@ function getPluginsRecurs(Plugins: Array<IPluginStatic|IPlugin|IPluginConfigurat
 function getRoutesWithConfigRecurs(item: IAppStatic|IModuleStatic, parent?: IAppStatic|IModuleStatic): Array<RouteConfiguration> {
   let routes: Array<RouteConfiguration> = []
   if (Reflect.hasMetadata('hapiour:modules', item)) {
-    let modules: Array<IModuleStatic> = Reflect.getMetadata('hapiour:modules', item)
-    let parentConfig: IModuleConfig = (parent) ? Reflect.getMetadata('hapiour:config', parent): {}
-    for (let Mod of modules) {
-      let config: IModuleConfig = Reflect.getMetadata('hapiour:config', Mod)
+    const modules: Array<IModuleStatic> = Reflect.getMetadata('hapiour:modules', item)
+    const parentConfig: IModuleConfig = (parent) ? Reflect.getMetadata('hapiour:config', parent) : {}
+    for (const Mod of modules) {
+      const config: IModuleConfig = Reflect.getMetadata('hapiour:config', Mod)
       let modRoutes: Array<RouteConfiguration> = _.cloneDeep(Reflect.getMetadata('hapiour:routes', Mod))
-      let mod: IModule = new Mod()
+      const mod: IModule = new Mod()
       modRoutes = _.each(modRoutes, (route: RouteConfiguration) => {
         route.path = _.get(parentConfig, 'basePath', '') + config.basePath + route.path
         route.handler = (<Function>route.handler).bind(mod)

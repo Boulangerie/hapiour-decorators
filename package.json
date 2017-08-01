@@ -9,8 +9,10 @@
   "main": "./build/hapiour",
   "typings": "./build/hapiour",
   "scripts": {
-    "test": "mocha -t 5000 -r ts-node/register ./integration-tests/tests/*.suite.ts",
-    "prepublish": "tsc",
+    "lint": "tslint -c tslint.json --type-check --project tsconfig.json lib/**/*.ts",
+    "test": "npm run lint && mocha -t 5000 -r ts-node/register ./integration-tests/tests/*.suite.ts",
+    "build": "rm -Rf ./build && tsc",
+    "prepublish": "npm run build",
     "bump": "npm version patch && git push --tags origin master",
     "bump:minor": "npm version minor && git push --tags origin master",
     "bump:major": "npm version major && git push --tags origin master"
@@ -33,7 +35,7 @@
     "@types/chai": "^4.0.1",
     "@types/lodash": "^4.14.55",
     "@types/mocha": "^2.2.35",
-    "@types/request": "~0.0.37",
+    "@types/request": "^2.0.0",
     "@types/winston": "^2.2.0",
     "bluebird": "^3.4.7",
     "chai": "^4.0.2",
@@ -41,6 +43,8 @@
     "mocha": "^3.2.0",
     "request": "^2.79.0",
     "ts-node": "^3.1.0",
+    "tslint": "^5.5.0",
+    "tslint-presets": "^2.0.0",
     "typescript": "^2.4.1",
     "winston": "^2.3.0"
   }
