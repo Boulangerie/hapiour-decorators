@@ -1,14 +1,11 @@
 {
   "compileOnSave": false,
-  "src": [
-    "lib/hapiour.ts"
-  ],
-  "exclude": [
-    "node_modules/**/*"
+  "files": [
+    "./lib/hapiour.ts"
   ],
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2016",
+    "target": "es5",
     "noImplicitAny": false,
     "sourceMap": false,
     "removeComments": true,
@@ -16,6 +13,7 @@
     "emitDecoratorMetadata": true,
     "preserveConstEnums": true,
     "outDir": "./build",
+    "declaration": true,
     "pretty": true
   }
 }
