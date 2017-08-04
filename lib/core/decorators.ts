@@ -18,7 +18,7 @@ export function InjectDecorator(Modules: Array<IModule>): Function {
   }
 }
 
-export function PluginsDecorator(Plugins: Array<IPluginStatic|IPlugin|IPluginConfiguratorStatic|Array<IPluginStatic|IPlugin|IPluginConfiguratorStatic>>): Function {
+export function PluginsDecorator(Plugins: Array<IPluginStatic|IPlugin|IPluginConfiguratorStatic>): Function {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
 
     Reflect.defineMetadata('hapiour:plugins', Plugins, target)

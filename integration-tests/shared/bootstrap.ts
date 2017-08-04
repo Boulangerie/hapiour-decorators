@@ -1,18 +1,18 @@
 import 'reflect-metadata'
 import { Server } from 'hapi'
-import { bootstrap, IApp } from '../../lib/hapiour'
+import { bootstrap, IApp, bootstrapWithOptions, IInjector } from '../../lib/hapiour'
 import { MyApp } from '../app/app'
-
 
 class BootstrapFactory {
 
   public app: ITestedApp
 
-  public constructor() {
-  }
-
-  public start(): void {
-    this.app = bootstrap(MyApp)[0]
+  public start(options?: any): void {
+    if (options) {
+      this.app = bootstrapWithOptions([MyApp], options)[0]
+    } else {
+      this.app = bootstrap(MyApp)[0]
+    }
   }
 
   public stop(): Promise<Error> {
