@@ -18,7 +18,7 @@ export function bootstrapWithOptions(BootstrapedApps: Array<IAppStatic>, options
     const server: Server = new Server()
     const app: IApp = new BootstrapedApp(server)
 
-    server.connection(_.extend(Reflect.getMetadata('hapiour:config', BootstrapedApp), DEFAULT_APP_CONFIG))
+    server.connection(_.extend(DEFAULT_APP_CONFIG, Reflect.getMetadata('hapiour:config', BootstrapedApp)))
     _.invoke(app, 'onInit')
     const plugins: Array<IPlugin> = getPluginsRecurs(options.injector, Reflect.getMetadata('hapiour:plugins', BootstrapedApp))
     const routes: Array<RouteConfiguration> = getRoutesWithConfigRecurs(options.injector, BootstrapedApp)
