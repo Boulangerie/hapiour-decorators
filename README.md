@@ -4,6 +4,7 @@
 [![dependencies](https://david-dm.org/Boulangerie/hapiour-decorators.svg)](https://david-dm.org/Boulangerie/hapiour-decorators)
 [![npm devDependencies](https://img.shields.io/david/dev/Boulangerie/hapiour-decorators.svg)](https://david-dm.org/Boulangerie/hapiour-decorators)
 [![npm license](https://img.shields.io/npm/l/hapiour-decorators.svg)](https://www.npmjs.org/package/hapiour-decorators)
+[![Greenkeeper badge](https://badges.greenkeeper.io/Boulangerie/hapiour-decorators.svg)](https://greenkeeper.io/)
 
 # hapiour-decorators
 
