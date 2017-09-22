@@ -7,6 +7,8 @@
 
 # hapiour-decorators
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Boulangerie/hapiour-decorators.svg)](https://greenkeeper.io/)
+
 Typescript decorators for Hapi
 
 # Install
